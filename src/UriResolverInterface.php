@@ -9,10 +9,15 @@
 
 declare(strict_types=1);
 
-namespace Spiral\Distribution\Resolver;
+namespace Spiral\Distribution;
 
-use Spiral\Distribution\ResolverInterface;
+use Psr\Http\Message\UriInterface;
 
-abstract class Resolver implements ResolverInterface
+interface UriResolverInterface
 {
+    /**
+     * @param string $file
+     * @return UriInterface
+     */
+    public function resolve(string $file): UriInterface;
 }
