@@ -7,39 +7,20 @@ namespace Spiral\Tests\Distribution;
 use Spiral\Distribution\Manager;
 use Spiral\Distribution\Resolver\StaticResolver;
 
-/**
- * @group unit
- */
+#[\PHPUnit\Framework\Attributes\Group('unit')]
 class ManagerTestCase extends TestCase
 {
-    /**
-     * @var StaticResolver
-     */
-    private $resolver;
-
-    /**
-     * @var Manager
-     */
-    private $manager;
-
-    public function setUp(): void
-    {
-        $this->resolver = new StaticResolver($this->uri('localhost'));
-
-        $this->manager = new Manager();
-        $this->manager->add(Manager::DEFAULT_RESOLVER, $this->resolver);
-
-        parent::setUp();
-    }
+    private StaticResolver $resolver;
+    private Manager $manager;
 
     public function testDefaultResolver(): void
     {
-        $this->assertSame($this->resolver, $this->manager->resolver());
+        self::assertSame($this->resolver, $this->manager->resolver());
     }
 
     public function testResolverByName(): void
     {
-        $this->assertSame($this->resolver, $this->manager->resolver('default'));
+        self::assertSame($this->resolver, $this->manager->resolver('default'));
     }
 
     public function testUnknownResolver(): void
@@ -53,7 +34,7 @@ class ManagerTestCase extends TestCase
     {
         $this->manager->add('known', $this->resolver);
 
-        $this->assertSame($this->resolver, $this->manager->resolver('known'));
+        self::assertSame($this->resolver, $this->manager->resolver('known'));
     }
 
     public function testIterator(): void
@@ -61,22 +42,32 @@ class ManagerTestCase extends TestCase
         $manager = clone $this->manager;
 
         $resolvers = \iterator_to_array($manager->getIterator());
-        $this->assertSame([Manager::DEFAULT_RESOLVER => $this->resolver], $resolvers);
+        self::assertSame([Manager::DEFAULT_RESOLVER => $this->resolver], $resolvers);
 
         $manager->add('example', $this->resolver);
 
         $resolvers = \iterator_to_array($manager->getIterator());
-        $this->assertSame([Manager::DEFAULT_RESOLVER => $this->resolver, 'example' => $this->resolver], $resolvers);
+        self::assertSame([Manager::DEFAULT_RESOLVER => $this->resolver, 'example' => $this->resolver], $resolvers);
     }
 
     public function testCount(): void
     {
         $manager = clone $this->manager;
 
-        $this->assertSame(1, $manager->count());
+        self::assertCount(1, $manager);
 
         $manager->add('example', $this->resolver);
 
-        $this->assertSame(2, $manager->count());
+        self::assertCount(2, $manager);
+    }
+
+    protected function setUp(): void
+    {
+        $this->resolver = new StaticResolver($this->uri('localhost'));
+
+        $this->manager = new Manager();
+        $this->manager->add(Manager::DEFAULT_RESOLVER, $this->resolver);
+
+        parent::setUp();
     }
 }
