@@ -16,9 +16,9 @@ use Spiral\Distribution\Internal\DateTimeIntervalFactoryInterface;
 class S3SignedResolver extends ExpirationAwareResolver
 {
     public function __construct(
-        private S3ClientInterface $client,
-        private string $bucket,
-        private ?string $prefix = null
+        private readonly S3ClientInterface $client,
+        private readonly string $bucket,
+        private readonly ?string $prefix = null,
     ) {
         parent::__construct();
     }
@@ -32,7 +32,7 @@ class S3SignedResolver extends ExpirationAwareResolver
 
         $request = $this->client->createPresignedRequest(
             $command,
-            $this->getExpirationDateTime($expiration)
+            $this->getExpirationDateTime($expiration),
         );
 
         return $request->getUri();

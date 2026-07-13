@@ -32,35 +32,38 @@ class DistributionBootloader extends Bootloader
     {
         $binder->bindSingleton(
             UriResolverInterface::class,
-            static fn (DistributionInterface $dist) => $dist->resolver()
+            static fn(DistributionInterface $dist): UriResolverInterface => $dist->resolver(),
         );
 
         $binder->bindSingleton(
             UriResolver::class,
-            static fn (ContainerInterface $app) => $app->get(UriResolverInterface::class)
+            static fn(ContainerInterface $app) => $app->get(UriResolverInterface::class),
         );
     }
 
     private function registerManager(BinderInterface $binder): void
     {
-        $binder->bindSingleton(DistributionInterface::class, static function (DistributionConfig $config) {
-            $manager = new Manager($config->getDefaultDriver());
+        $binder->bindSingleton(
+            DistributionInterface::class,
+            static function (DistributionConfig $config): DistributionInterface {
+                $manager = new Manager($config->getDefaultDriver());
 
-            foreach ($config->getResolvers() as $name => $resolver) {
-                $manager->add($name, $resolver);
-            }
+                foreach ($config->getResolvers() as $name => $resolver) {
+                    $manager->add($name, $resolver);
+                }
 
-            return $manager;
-        });
+                return $manager;
+            },
+        );
 
         $binder->bindSingleton(
             MutableDistributionInterface::class,
-            static fn (ContainerInterface $app) => $app->get(DistributionInterface::class)
+            static fn(ContainerInterface $app) => $app->get(DistributionInterface::class),
         );
 
         $binder->bindSingleton(
             Manager::class,
-            static fn (ContainerInterface $app) => $app->get(DistributionInterface::class)
+            static fn(ContainerInterface $app) => $app->get(DistributionInterface::class),
         );
     }
 }
