@@ -7,7 +7,7 @@ namespace Spiral\Tests\Distribution\Resolver;
 use Spiral\Distribution\Resolver\StaticResolver;
 use Spiral\Tests\Distribution\TestCase;
 
-final class StaticResolverTest extends TestCase
+class StaticResolverTest extends TestCase
 {
     public function testGuzzleResolve(): void
     {
@@ -15,12 +15,12 @@ final class StaticResolverTest extends TestCase
 
         $uri = $resolver->resolve('file.jpg');
 
-        self::assertSame('http://localhost/file.jpg', (string) $uri);
+        self::assertSame('http://localhost/file.jpg', (string)$uri);
 
         // PHP 8.1 deprecation error fix
         self::assertTrue(
-            ($error = \error_get_last()) === null ||
-            !\str_contains($error['message'], 'Spiral'),
+            ($error = error_get_last()) === null ||
+            \strpos($error['message'], 'Spiral') === false
         );
     }
 
@@ -30,12 +30,12 @@ final class StaticResolverTest extends TestCase
 
         $uri = $resolver->resolve('file.jpg');
 
-        self::assertSame('http://localhost/upload/file.jpg', (string) $uri);
+        self::assertSame('http://localhost/upload/file.jpg', (string)$uri);
 
         // PHP 8.1 deprecation error fix
         self::assertTrue(
-            ($error = \error_get_last()) === null ||
-            !\str_contains($error['message'], 'Spiral'),
+            ($error = error_get_last()) === null ||
+            \strpos($error['message'], 'Spiral') === false
         );
     }
 }

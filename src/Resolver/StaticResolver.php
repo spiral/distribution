@@ -12,7 +12,7 @@ class StaticResolver extends UriResolver
 {
     private const URI_PATH_DELIMITER = '/';
 
-    private readonly UriInterface $host;
+    private UriInterface $host;
 
     public function __construct(UriInterface $host)
     {
@@ -43,6 +43,6 @@ class StaticResolver extends UriResolver
         $prefix = \trim($this->host->getPath(), self::URI_PATH_DELIMITER);
         $file = \trim($file, self::URI_PATH_DELIMITER);
 
-        return self::URI_PATH_DELIMITER . ($prefix === '' ? '' : $prefix . self::URI_PATH_DELIMITER) . $file;
+        return self::URI_PATH_DELIMITER . ('' === $prefix ? '' : $prefix . self::URI_PATH_DELIMITER) . $file;
     }
 }

@@ -13,8 +13,9 @@ final class DateTimeIntervalFactory implements DateTimeIntervalFactoryInterface
     private const ERROR_INVALID_INTERVAL_TYPE = 'The value of type `%s` is not a valid date interval type.';
 
     public function __construct(
-        private readonly DateTimeFactoryInterface $factory = new DateTimeFactory(),
-    ) {}
+        private DateTimeFactoryInterface $factory = new DateTimeFactory()
+    ) {
+    }
 
     public function create(mixed $duration): \DateInterval
     {
@@ -23,7 +24,7 @@ final class DateTimeIntervalFactory implements DateTimeIntervalFactoryInterface
         } catch (\InvalidArgumentException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            throw new \InvalidArgumentException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new \InvalidArgumentException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
@@ -46,8 +47,8 @@ final class DateTimeIntervalFactory implements DateTimeIntervalFactoryInterface
             \is_int($duration) => new \DateInterval('PT' . $duration . 'S'),
             $duration === null => new \DateInterval('PT0S'),
             default => throw new \InvalidArgumentException(
-                \sprintf(self::ERROR_INVALID_INTERVAL_TYPE, \get_debug_type($duration)),
-            ),
+                \sprintf(self::ERROR_INVALID_INTERVAL_TYPE, \get_debug_type($duration))
+            )
         };
     }
 }
